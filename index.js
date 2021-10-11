@@ -40,3 +40,7 @@ var server = app.listen(PORT, () => {
   var port = server.address().port;
   console.log("Server is running on PORT: " + port);
 });
+
+app.get("/", (req, res) => {
+  res.send("Hello");
+});
