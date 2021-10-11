@@ -701,4 +701,8 @@ router.post("/sendOTP", async (req, res) => {
     });
 });
 
+router.get("/", (req, res) => {
+  res.send("Welcome to ROOZGAR Vendor Server!");
+});
+
 module.exports = router;
