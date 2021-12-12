@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const app = express();
-const port = process.env.port || 3000;
+const PORT = process.env.PORT || 3000;
 const { mongoUrl } = require("./keys");
 require("./models/Vendor");
 require("./models/Client");
@@ -36,7 +36,7 @@ mongoose.connection.on("error", (err) => {
   console.log("This is error", err);
 });
 
-var server = app.listen(port, () => {
-  var port = server.address().port;
+var server = app.listen(PORT, () => {
+  var port = server.address().PORT;
   console.log("Server is running on PORT: " + port);
 });
