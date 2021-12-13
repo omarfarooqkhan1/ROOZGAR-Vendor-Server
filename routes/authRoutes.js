@@ -29,6 +29,16 @@ const SubCategory = mongoose.model("SubCategory");
 const UnVerifiedVendor = mongoose.model("unverifiedvendors");
 const BlockedVendor = mongoose.model("blockedvendors");
 
+router.get("/getAllComments", async (req, res) => {
+  try {
+    const vendor = await Vendor.findById(_id);
+    const vendorId = vendor._id;
+    const services = await Service.find({ vendorId }).populate("subCategory");
+  } catch (error){
+    console.log(error)
+  };
+});
+
 router.post("/signup", async (req, res) => {
   try {
     const userName =
@@ -327,13 +337,33 @@ router.get("/getReviews/:_id", async (req, res) => {
     const vendor = await Vendor.findById(_id);
     const vendorId = vendor._id;
     const reviews = await Review.find({ vendorId });
+    var comments = [];
     var avg = 0;
     for (let i = 0; i < reviews.length; i++) {
       avg += reviews[i].rating;
+      comments[i] = reviews[i].description;
     }
+
     avg = avg / reviews.length;
     const overallRating = avg.toFixed(2);
-    res.send({ reviews: reviews, overallRating: overallRating });
+    
+    fetch(`http://bb45-111-119-187-30.ngrok.io/sentiment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        sentences: comments
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        res.send({ reviews: reviews, overallRating: overallRating, sentiment: data.sentiment });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
   } catch (err) {
     return res.send(err.message);
   }

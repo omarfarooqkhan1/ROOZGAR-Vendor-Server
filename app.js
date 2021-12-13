@@ -37,6 +37,6 @@ mongoose.connection.on("error", (err) => {
 });
 
 var server = app.listen(PORT, () => {
-  var port = server.address().PORT;
-  console.log("Server is running on PORT: " + port);
+  var PORT = server.address().PORT;
+  console.log("Server is running on PORT: " + PORT);
 });
