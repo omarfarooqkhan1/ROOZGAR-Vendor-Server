@@ -349,9 +349,9 @@ router.get("/getReviews/:_id", async (req, res) => {
 
     let payload = { sentences: comments };
 
-    let response = await axios.post('http://bb45-111-119-187-30.ngrok.io/sentiment', payload);
+    let response = await axios.post('http://5aed-111-119-187-30.ngrok.io/sentiment', payload);
     
-    let sentiment = response.data.sentiment;
+    const sentiment = response.data.sentiment;
     
     res.send({ reviews: reviews, overallRating: overallRating, sentiment: sentiment });
 
