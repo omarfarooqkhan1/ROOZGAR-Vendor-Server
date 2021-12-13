@@ -1,5 +1,5 @@
+const axios = require('axios');
 var admin = require("firebase-admin");
-
 var serviceAccount = require("./roozgar-vendor-firebase-adminsdk-bevsb-a62c2d7a10.json");
 
 admin.initializeApp({
@@ -346,23 +346,14 @@ router.get("/getReviews/:_id", async (req, res) => {
 
     avg = avg / reviews.length;
     const overallRating = avg.toFixed(2);
+
+    let payload = { sentences: comments };
+
+    let response = await axios.post('http://bb45-111-119-187-30.ngrok.io/sentiment', payload);
     
-    fetch(`http://bb45-111-119-187-30.ngrok.io/sentiment`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        sentences: comments
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        res.send({ reviews: reviews, overallRating: overallRating, sentiment: data.sentiment });
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    let sentiment = response.data.sentiment;
+    
+    res.send({ reviews: reviews, overallRating: overallRating, sentiment: sentiment });
 
   } catch (err) {
     return res.send(err.message);
