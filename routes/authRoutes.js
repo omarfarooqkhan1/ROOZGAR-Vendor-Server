@@ -29,16 +29,6 @@ const SubCategory = mongoose.model("SubCategory");
 const UnVerifiedVendor = mongoose.model("unverifiedvendors");
 const BlockedVendor = mongoose.model("blockedvendors");
 
-router.get("/getAllComments", async (req, res) => {
-  try {
-    const vendor = await Vendor.findById(_id);
-    const vendorId = vendor._id;
-    const services = await Service.find({ vendorId }).populate("subCategory");
-  } catch (error){
-    console.log(error)
-  };
-});
-
 router.post("/signup", async (req, res) => {
   try {
     const userName =
@@ -349,7 +339,7 @@ router.get("/getReviews/:_id", async (req, res) => {
 
     let payload = { sentences: comments };
 
-    let response = await axios.post('http://5aed-111-119-187-30.ngrok.io/sentiment', payload);
+    let response = await axios.post('http://46b1-37-111-134-191.ngrok.io/sentiment', payload);
     
     const sentiment = response.data.sentiment;
     
@@ -412,6 +402,32 @@ router.get("/getCategories", async (req, res) => {
   try {
     const categories = await Category.find();
     res.send({ categories });
+  } catch (err) {
+    return res.send(err.message);
+  }
+});
+
+router.get("/getSubCategories/", async (req, res) => {
+  try {
+    const subCategories = await SubCategory.find();
+    subCategoryNames = [];
+    for (let i = 0; i < subCategories.length; i++) {
+      subCategoryNames[i] = subCategories[i].title;
+    }
+    let payload = { sentence: "I need to mow my garden", categories: subCategoryNames, threshold: 3 };
+
+    let response = await axios.post('http://46b1-37-111-134-191.ngrok.io/nlp', payload);
+    
+    var similar_subCategories = response.data.similar_subCategories;
+
+    const filtered_subCategories = [];
+
+    for ( var subCategoryTitle in similar_subCategories ) {
+      filtered_subCategories.push(subCategories.find(subCategory => subCategory.title === subCategoryTitle));
+    }
+
+    res.send({similar_subCategories: filtered_subCategories});
+
   } catch (err) {
     return res.send(err.message);
   }
