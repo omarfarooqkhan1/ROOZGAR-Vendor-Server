@@ -339,7 +339,7 @@ router.get("/getReviews/:_id", async (req, res) => {
 
     let payload = { sentences: comments };
 
-    let response = await axios.post('http://510b-37-111-140-158.ngrok.io/sentiment', payload);
+    let response = await axios.post('https://510b-37-111-140-158.ngrok.io/sentiment', payload);
     
     const sentiment = response.data.sentiment;
     
@@ -417,7 +417,7 @@ router.get("/getSubCategories/", async (req, res) => {
     }
     let payload = { sentence: "I need to mow my garden", categories: subCategoryNames, threshold: 3 };
 
-    let response = await axios.post('http://510b-37-111-140-158.ngrok.io/nlp', payload);
+    let response = await axios.post('https://510b-37-111-140-158.ngrok.io/nlp', payload);
     
     var similar_subCategories = response.data.similar_subCategories;
 
