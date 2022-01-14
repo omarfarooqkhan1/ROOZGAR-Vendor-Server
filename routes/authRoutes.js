@@ -336,14 +336,8 @@ router.get("/getReviews/:_id", async (req, res) => {
 
     avg = avg / reviews.length;
     const overallRating = avg.toFixed(2);
-
-    let payload = { sentences: comments };
-
-    let response = await axios.post('https://510b-37-111-140-158.ngrok.io/sentiment', payload);
     
-    const sentiment = response.data.sentiment;
-    
-    res.send({ reviews: reviews, overallRating: overallRating, sentiment: sentiment });
+    res.send({ reviews: reviews, overallRating: overallRating, sentiment: "Neutral" });
 
   } catch (err) {
     return res.send(err.message);
